@@ -1,0 +1,57 @@
+
+Given an encoded string, return its decoded string.
+The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
+You may assume that the input string is always valid; there are no extra white spaces, square brackets are well-formed, etc. Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there will not be input like 3a or 2[4].
+The test cases are generated so that the length of the output will never exceed 105.
+
+
+Input: s = "3[a]2[bc]"
+Output: "aaabcbc"
+
+Input: s = "3[a2[c]]"
+Output: "accaccacc"
+
+Solution : 
+
+                   string decodeString(string s) {
+
+                          stack<int>st1 ;
+                          stack<string>st2 ;
+                          string curstr = "" ;
+                          int curnum = 0;
+                          int prevnum ;
+                          string prevstr ="" ;
+                          for( int i = 0 ; i < s.length() ; i++)
+                          {
+                               if( isdigit(s[i] ))
+                               {
+                                  curnum = curnum * 10 + int(s[i])-48 ;
+                               }
+                               else if ( s[i] >= 'a' && s[i] <= 'z')
+                               {
+                                  curstr += s[i] ;
+                               }
+                               else if ( s[i] == '[')
+                               {
+                                   st2.push(curstr);
+                                   st1.push(curnum);
+                                   curnum = 0 ;
+                                   curstr="";
+                               }
+                               else if ( s[i] == ']')
+                               {
+                                  int it = st1.top();
+                                  st1.pop();
+                                  prevstr = st2.top();
+                                  st2.pop();
+                                  string temp = "";
+                                  while(it--)
+                                  {
+                                      temp = temp + curstr ;   
+                                  }
+                                  curstr = prevstr + temp ;
+                               }
+                          }
+                          return curstr ;
+
+                      }
